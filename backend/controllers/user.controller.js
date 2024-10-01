@@ -7,19 +7,25 @@ const register = async (req, res) => {
   try {
     const { fullname, username, password, gender } = req.body;
 
+    // Check if all inputs are provided
     if (!fullname || !username || !password || !gender) {
-      res.send("please fill all inputs");
+      return res.status(400).json({ message: "Please fill all inputs" });
     }
 
+    // Check if username already exists
     const user = await User.findOne({ username });
     if (user) {
-      console.log("username already exist");
+      return res.status(400).json({ message: "Username already exists" });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const maleProfilePhoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
 
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Select profile photo based on gender
+    const maleProfilePhoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const femaleProfilePhoto = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
+    // Create the user
     await User.create({
       fullname,
       username,
@@ -27,26 +33,32 @@ const register = async (req, res) => {
       profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto,
       gender,
     });
-    res.status(201).json({
-      message: "user successfully registered",
-      sucess: true,
+
+    // Send success response
+    return res.status(201).json({
+      message: "User successfully registered",
+      success: true,
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "An error occurred",
+    });
   }
 };
+
 //login
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res.send("input valid credentials");
+      return res.status(401).send("please enter details");
     }
     const validUser = await User.findOne({ username });
 
     if (!validUser) {
-      res.status(401).send("user not exist");
+      return res.status(401).send("user not exist");
     }
 
     const validPass = await bcrypt.compare(password, validUser.password);
@@ -63,11 +75,14 @@ const login = async (req, res) => {
     res
       .status(200)
       .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 1000,
+        maxAge: 1 * 24 * 60 * 1000 * 1000,
         httpOnly: true,
       })
       .json({
         token,
+        sucess: true,
+        message: "login done",
+
         userID: validUser._id,
         username: validUser.username,
         fullname: validUser.fullname,
@@ -92,7 +107,7 @@ const getOtherUsers = async (req, res) => {
   try {
     const loggedInUserId = req.id;
     console.log(loggedInUserId);
-    
+
     const getOtherUsers = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("-password");
@@ -104,4 +119,19 @@ const getOtherUsers = async (req, res) => {
     console.log(error);
   }
 };
-export { register, login, logout, getOtherUsers };
+
+const userInfo = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+
+    const user = await User.findById(id).select("-password");
+    if (user) {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { register, login, logout, userInfo, getOtherUsers };

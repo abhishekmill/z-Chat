@@ -7,6 +7,12 @@ import router from "./routes/message.routes.js";
 import userRouter from "./routes/users.routes.js";
 import cookieParser from "cookie-parser";
 
+app.use(
+  cors({
+    origin: "*", //  Allow requests from this origin only
+  })
+);
+
 dotenv.config();
 const port = 4000;
 
