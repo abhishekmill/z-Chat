@@ -123,7 +123,7 @@ const Sidebar = ({
           <img
             src={currUserData.profilePhoto}
             alt=""
-            className=" max-w-14 pl-2   py-2 "
+            className=" max-w-14 ml-2  border-2 border-yellow-300  rounded-full   my-2 "
           />
 
           <div className="py-2.5 mt-1 flex items-center">
@@ -160,7 +160,7 @@ const Sidebar = ({
         {/* ..... */}
         <div className=" ">
           <ul>
-            <div className="max-h-36 overflow-y-scroll no-scrollbar ">
+            <div className="max-h-48 overflow-y-scroll border-b no-scrollbar hover:custom-scrollbar ">
               {/* searched users  */}
               {Users.map((user) => {
                 const isonline = onlineUsers.includes(user._id);
