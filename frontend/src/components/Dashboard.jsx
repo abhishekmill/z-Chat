@@ -17,7 +17,7 @@ const Dashboard = () => {
   const [reciverName, setReciverName] = useState("");
   const [currUserData, setcurrUserData] = useState([]);
   const [pingUsers, setPingUsers] = useState([]);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState("false");
   const currentUserId = localStorage.getItem("userID");
   const endOfMessagesRef = useRef(null);
   // feth current user data
@@ -96,6 +96,10 @@ const Dashboard = () => {
     }
   }, [socketMessages, receiverId]);
 
+  const toggleSidebar2 = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   // Handle sending messages
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -131,142 +135,145 @@ const Dashboard = () => {
 
   // -----------------------------------------
   return (
-    <div className=" flex justify-center w-full    ">
-      {/* Sidebar Component */}
-
-      <div className="">
+    <div className="flex  bg-gray-900   w-[100vw] h-[100vh] ">
+      <div className="   ">
         <Sidebar
+          toggleSidebar2={toggleSidebar2}
           setPingUsers={setPingUsers}
           pingUsers={pingUsers}
           onlineUsers={onlineUsers} // Passing the online users to Sidebar
           setReceiverId={setReceiverId}
           currentUserId={currentUserId}
           setReciverName={setReciverName}
+          currUserData={currUserData}
         />
       </div>
-      <div className="fixed  bottom-5  backdrop-blur-md md:w-[60vw]    rounded-xl   ">
-        <h3 className="text-center">
-          Send a Message to {reciverName || "Select a User"}
-        </h3>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message"
-            className="border rounded p-2 w-ful l"
-          />
-          <button
-            onClick={(e) => {
-              handleSendMessage(e);
-            }}
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-          >
-            Send Message
-          </button>
+
+      {/* overlay  */}
+      <div
+        className={`${
+          isSidebarOpen ? "hidden" : "block "
+        }  backdrop-blur-sm bg-black opacity-35 md:hidden   w-full absolute    h-screen`}
+      ></div>
+      {/* overlay */}
+
+      <div className="justify-center w-full  flex flex-col py-4 ">
+        {" "}
+        {/* title  */}
+        <div className=" bg-none mx-1 p-2 border-gray-600 border rounded-lg">
+          <p className="font-bold text-lg text-white px-2  md:m-0 ml-10 capitalize">
+            {reciverName || "Select a User"}
+          </p>
         </div>
-      </div>
-
-      {/* chat area  */}
-      <div className="m-auto ">
-        <div>
-          {/* Main Chat Area */}
-          <div className=" flex-grow flex flex-col  ">
-            <div className="bg-yellow-100 px-9 fixed top-5 rounded-lg">
-              <h1 className="font-sans text-center font-semibold">Dashboard</h1>
-              <p>
-                {currentUserId
-                  ? `Logged in as: ${currUserData.fullname}`
-                  : "No user logged in"}
-              </p>
-            </div>
-
-            {/* Input for Message */}
-
-            {/* Display Messages */}
-            <div className="message bg-slate-300  md:w-[70vw] w-[100vw] overflow-hidden  pb-24 px-5   ">
-              <h3>Messages with {reciverName}:</h3>
-              {loading ? (
-                <p>Loading...</p>
-              ) : error ? (
-                <p>Error fetching messages: {error.message}</p>
-              ) : messages.length === 0 ? (
-                // Check if messages array is empty
-                <div>Start a conversation</div>
-              ) : (
-                <ul>
-                  {messages.map((msg, index) => {
-                    if (receiverId === msg.senderId) {
-                      // Message received by the current user from the selected receiver
-                      return (
-                        <li
-                          key={index}
-                          className="bg-gray-200 mr-auto h-16  text-left pr-7 max-w-[40vw]  md:max-w-[30vw] p-2 rounded-lg my-2"
-                        >
-                          {/* <span className="block font-semibold">
+        {/* title  closed */}
+        {/* Display Messages */}
+        <div className="message bg-gray-700  text-white m-2 overflow-y-scroll   overflow-hidden   pb-24 px-5  rounded-lg  ">
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error fetching messages: {error.message}</p>
+          ) : messages.length === 0 ? (
+            // Check if messages array is empty
+            <div>Start a conversation</div>
+          ) : (
+            <ul>
+              {messages.map((msg, index) => {
+                if (receiverId === msg.senderId) {
+                  // Message received by the current user from the selected receiver
+                  return (
+                    <li
+                      key={index}
+                      className="bg-[#9758ED] mr-auto  w-fit    text-left px-3 max-w-[40vw]  md:max-w-[30vw] p-2 rounded-lg my-2"
+                    >
+                      {/* <span className="block font-semibold">
                             {reciverName}:
                           </span> */}
-                          <span className="break-words">{msg.message}</span>
-                        </li>
-                      );
-                    } else if (currentUserId === msg.senderId) {
-                      // Message sent by the current user to the selected receiver
-                      return (
-                        <li
-                          key={index}
-                          className="bg-green-200 ml-auto text-right pl-7 w-fit  p-2 rounded-lg my-2"
-                        >
-                          {/* <span className="block font-semibold">
+                      <span className="break-words">{msg.message}</span>
+                    </li>
+                  );
+                } else if (currentUserId === msg.senderId) {
+                  // Message sent by the current user to the selected receiver
+                  return (
+                    <li
+                      key={index}
+                      className="bg-[#2B2B32] ml-auto text-right px-3 w-fit  p-2 rounded-lg my-2"
+                    >
+                      {/* <span className="block font-semibold">
                             {currUserData?.fullname}:
                           </span> */}
-                          <span>{msg.message}</span>
-                        </li>
-                      );
-                    }
+                      <span>{msg.message}</span>
+                    </li>
+                  );
+                }
 
-                    // If the message doesn't match either condition, return null
-                    return null;
-                  })}
+                // If the message doesn't match either condition, return null
+                return null;
+              })}
 
-                  {socketMessages.map((msg, index) => {
-                    if (
-                      currentUserId === msg.receiverId &&
-                      receiverId === msg.senderId
-                    ) {
-                      return (
-                        <li
-                          key={index}
-                          className="bg-gray-200 mr-auto text-left max-w-xs p-2 rounded-lg my-2"
-                        >
-                          <span className="block font-semibold">
-                            {reciverName}:
-                          </span>
-                          <span>{msg.message}</span>
-                        </li>
-                      );
-                    } else if (
-                      currentUserId === msg.senderId &&
-                      receiverId === msg.receiverId
-                    ) {
-                      return (
-                        <li
-                          key={index}
-                          className="bg-green-200 ml-auto text-right max-w-xs p-2 rounded-lg my-2"
-                        >
-                          <span className="block font-semibold">
-                            {currUserData?.fullname}:
-                          </span>
-                          <span>{msg.message}</span>
-                        </li>
-                      );
-                    }
-                  })}
-                  <div ref={endOfMessagesRef}></div>
-                </ul>
-              )}
-            </div>
-          </div>
+              {socketMessages.map((msg, index) => {
+                if (
+                  currentUserId === msg.receiverId &&
+                  receiverId === msg.senderId
+                ) {
+                  return (
+                    <li
+                      key={index}
+                      className="bg-[#9758ED] mr-auto  w-fit    text-left px-3 max-w-[40vw]  md:max-w-[30vw] p-2 rounded-lg my-2"
+                    >
+                      <span className="block font-semibold">
+                        {reciverName}:
+                      </span>
+                      <span>{msg.message}</span>
+                    </li>
+                  );
+                } else if (
+                  currentUserId === msg.senderId &&
+                  receiverId === msg.receiverId
+                ) {
+                  return (
+                    <li
+                      key={index}
+                      className="bg-[#2B2B32] ml-auto text-right px-3 w-fit  p-2 rounded-lg my-2"
+                    >
+                      <span className="block font-semibold">
+                        {currUserData?.fullname}:
+                      </span>
+                      <span>{msg.message}</span>
+                    </li>
+                  );
+                }
+              })}
+              <div ref={endOfMessagesRef}></div>
+            </ul>
+          )}
         </div>
+        {/* input  */}
+        <div className="bg-[#26272D] mx-5  gap-5 bottom-10 rounded-lg">
+          {receiverId ? (
+            <div>
+              <div className="flex justify-between">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Type your message"
+                  className="border rounded bg-transparent p-2 w-full  "
+                />
+                <button
+                  onClick={(e) => {
+                    handleSendMessage(e);
+                  }}
+                  className="bg-blue-500 mx-1 text-white px-2 py-1 rounded"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div> select a user </div>
+          )}
+        </div>
+        <div className=" "></div>
       </div>
     </div>
   );

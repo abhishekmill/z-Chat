@@ -9,7 +9,7 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "/api": {
-        target: "http://192.168.1.18:4000", // Target backend server
+        target: "http://192.168.1.14:4000", // Target backend server
         changeOrigin: true, // Changes the origin header to the target URL
       },
     },
