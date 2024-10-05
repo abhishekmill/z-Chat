@@ -142,6 +142,11 @@ const Dashboard = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage(e);
+    }
+  };
   // -----------------------------------------
   return (
     <div className="flex  bg-gray-900   w-[100vw] h-[100vh] ">
@@ -179,23 +184,26 @@ const Dashboard = () => {
         {!receiverId ? (
           //if user id is not selected
           <div className="w-full h-full bg-gray-700 flex items-center rounded-md my-2 justify-center">
-            <div className=" w-72 border-dashed border justify-center items-center  text-white flex  h-32">
+            <div className=" w-[60vw] h-[30vh] border-dashed border justify-center items-center  text-white flex  ">
               select a user
             </div>
           </div>
         ) : (
-          <div className="message bg-gray-700  text-white m-2 overflow-y-scroll   overflow-hidden   pb-24 px-5  rounded-lg  ">
+          <div className="message bg-gray-700 h-full  text-white m-2 overflow-y-scroll   overflow-auto pb-24 px-5  rounded-lg  ">
             {loading ? (
               <p>Loading...</p>
             ) : error ? (
               <p>Error fetching messages: {error.message}</p>
             ) : messages.length === 0 ? (
               // Check if messages array is empty
-              <div>Start a conversation</div>
+              <div className="  bg-gray-700 flex items-center rounded-md my-2 justify-center">
+                <div className=" w-[60vw] h-[30vh] border-dashed border  justify-center items-center  text-white flex  ">
+                  Start a conversation
+                </div>
+              </div>
             ) : (
               <ul>
                 {messages.map((msg, index) => {
-                  console.log(msg);
                   const Time = moment(msg.createdAt).format(" h:mm A");
                   if (receiverId === msg.senderId) {
                     // Message received by the current user from the selected receiver
@@ -302,6 +310,7 @@ const Dashboard = () => {
 
                 <input
                   type="text"
+                  onKeyDown={handleKeyDown}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Type a message... 😊"
@@ -321,7 +330,6 @@ const Dashboard = () => {
             <div> </div>
           )}
         </div>
-        <div className=" "></div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Playwrite DE Grund", "cursive"],
+        sans: ["Fredoka", "sans-serif"],
       },
     },
   },

@@ -92,9 +92,8 @@ const Sidebar = ({
 
   const logout = async () => {
     try {
-      const res = await axios.post("/api/logout");
-      console.log(res);
       navigate("/login");
+      const res = await axios.post("/api/logout");
     } catch (error) {
       console.log(error);
     }
