@@ -20,5 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.1",
     "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": "18.x" // or the specific version of Node.js you're using
   }
 }
