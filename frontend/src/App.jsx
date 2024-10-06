@@ -11,7 +11,7 @@ import Dashboard from "./components/Dashboard";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Login />,
   },
   {
     path: "/signup",
