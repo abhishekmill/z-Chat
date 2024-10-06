@@ -69,7 +69,7 @@ const Dashboard = () => {
       return console.log("User not found.");
     }
 
-    const newSocket = io("http://:4000", {
+    const newSocket = io("https://z-chat-soba.onrender.com/", {
       query: { userId: currentUserId },
     });
     setSocket(newSocket);

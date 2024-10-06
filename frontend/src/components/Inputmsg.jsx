@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 const Inputmsg = () => {
   const userId = localStorage.getItem("userID");
 
-  const socket = io("http://192.168.1.18:4000", {
+  const socket = io("https://z-chat-soba.onrender.com", {
     query: { userId }, // Pass the userId as a query parameter to the server
   });
 

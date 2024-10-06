@@ -10,7 +10,7 @@ const useSocket = (userId) => {
   // const updatedmessages = useSelector((state) => state.message.messages);
   useEffect(() => {
     // Establish the socket connection
-    const socketInstance = io("http://192.168.1.18:4000", {
+    const socketInstance = io("https://z-chat-soba.onrender.com/", {
       query: { userId }, // Pass the userId as a query parameter to the server
     });
 
