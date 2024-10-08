@@ -7,6 +7,7 @@ import router from "./routes/message.routes.js";
 import userRouter from "./routes/users.routes.js";
 import cookieParser from "cookie-parser";
 
+// CORS setup
 const allowedOrigins = [
   "http://localhost:3000",
   "https://z-chat-roan.vercel.app",
@@ -33,12 +34,12 @@ const port = 4000;
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/", router);
-app.use("/api/", userRouter);
+app.use("/api", router);
+app.use("/api", userRouter);
 
 app.use(cors());
 
 server.listen(port, () => {
   DBconnect();
-  console.log("server is listening");
+  console.log("server is listening", port);
 });
