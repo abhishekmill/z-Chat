@@ -9,7 +9,7 @@ import cookieParser from "cookie-parser";
 
 app.use(
   cors({
-    origin: "*", //  Allow requests from this origin only
+    origin: "http://localhost:3000,https://z-chat-roan.vercel.app", //  Allow requests from this origin only
     credentials: true
   })
 );
