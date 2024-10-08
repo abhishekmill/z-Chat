@@ -7,10 +7,23 @@ import router from "./routes/message.routes.js";
 import userRouter from "./routes/users.routes.js";
 import cookieParser from "cookie-parser";
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://z-chat-roan.vercel.app",
+  "http://192.168.1.11:3000",
+  "http://192.168.1.11:5173",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000,https://z-chat-roan.vercel.app,http://192.168.1.11:3000,http://192.168.1.11:5173 ", //  Allow requests from this origin only
-    credentials: true
+    origin: function (origin, callback) {
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow the origin
+      } else {
+        callback(new Error("Not allowed by CORS")); // Block the origin
+      }
+    },
+    credentials: true,
   })
 );
 
