@@ -91,9 +91,9 @@ const Login = () => {
       <div className="flex h-screen w-full items-center justify-center bg-gray-100">
         <div className="w-full max-w-3xl overflow-hidden rounded-lg bg-white shadow-lg sm:flex">
           <div
-            className="m-2 w-full rounded-2xl bg-gray-400 bg-cover bg-center text-white sm:w-2/5"
+            className="m-2 w-full  rounded-2xl bg-gray-400 bg-cover bg-center text-white sm:w-2/5"
             style={{
-              backgroundimage: "url(/images/Vd9EQVZZRa9vVAMWfadpV.png)",
+              backgroundImage: "url('/background.jpeg')", // Corrected property name
             }}
           ></div>
           <div className="w-full sm:w-3/5">
@@ -132,13 +132,13 @@ const Login = () => {
                 <input
                   className="mt-4 w-full cursor-pointer rounded-lg bg-blue-600 pt-3 pb-3 text-white shadow-lg hover:bg-blue-400"
                   type="submit"
-                  value="Create account"
+                  value="Login"
                   onClick={handleLogin}
                 />
               </form>
               <div className="mt-4 text-center">
                 <p className="text-sm text-gray-600">
-                  Already have an account?{" "}
+                  Don't have an account?{" "}
                   <a
                     href="#"
                     className="font-bold text-blue-600 no-underline hover:text-blue-400"
