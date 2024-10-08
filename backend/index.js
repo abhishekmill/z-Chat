@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser";
 // CORS setup
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://z-chat-roan.vercel.app",
+  "https://z-chat-gamma.vercel.app",
   "http://192.168.1.11:3000",
   "http://192.168.1.11:5173",
 ];
