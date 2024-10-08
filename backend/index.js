@@ -8,29 +8,24 @@ import userRouter from "./routes/users.routes.js";
 import cookieParser from "cookie-parser";
 
 // CORS setup
-const allowedOrigins = [
-  "https://z-chat-gamma.vercel.app",
-  "http://localhost:3000",
-  "http://192.168.1.11:3000",
-  "http://192.168.1.11:5173",
-];
+// CORS configuration
+const allowedOrigins = ['https://z-chat-gamma.vercel.app'];
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE'); // Set allowed methods
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Set allowed headers
-  }
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request if the origin is in the allowed list
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE', // Restrict allowed methods if needed
+  allowedHeaders: 'Content-Type, Authorization', // Restrict allowed headers
+  credentials: true, // If using cookies or authorization headers
+};
 
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-    return res.status(200).json({});
-  }
-
-  next();
-});
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 
 dotenv.config();
